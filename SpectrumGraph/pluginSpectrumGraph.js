@@ -37,222 +37,35 @@ const CAL90000 = 0.0, CAL95500 = 0.0, CAL100500 = 0.0, CAL105500 = 0.0;     // S
 const SCAN_COVERAGE_OPACITY = 0.2;                                          // Scanner plugin 'defaultScannerMode' opacity value
 const DEFAULT_LANGUAGE = 'en';                                              // Default language (browser language setting overrides)
 
-// Language translations
-const translations = {
-  en: {
-    __name: 'English',
-    spectrumGraph: `Spectrum Graph`,
-    newVersion: `There is a new version of Spectrum Graph available`,
-    spectrumScanIncomplete: `Spectrum scan appears incomplete. Perform a manual scan if needed.`,
-    spectrumScanInvalid: `Spectrum scan appears invalid. Perform a manual scan if needed.`,
-    spectrumScanLocked:  `Scanning is currently locked by the administrator`,
-    errorDuringInitialisation: `[${pluginName}] Error initialising graph. The server may need to be restarted.`,
-    holdPeaks: `Hold Peaks`,
-    smoothGraphEdges: `Smooth Graph Edges`,
-    relativeFixedScale: `Relative/Fixed Scale`,
-    autoBaseline: `Auto Baseline`,
-    performManualScan: `Perform Manual Scan`,
-    moveAboveSignalGraph: `Move Above Signal Graph`,
-    resolutionTooLowToDisplay: `Resolution too low to display`,
-    scanOlderThanXMinutes: `Scan older than {hours}h {minutes}m for {antennas}`,
-    noSignal: `[${pluginName}] Error receiving signal data`,
-    scanning: `Scanning`,
-  },
-  // en_us: {
-  //   __name: 'English (US)',
-  //   spectrumGraph: `Spectrum Graph`,
-  //   newVersion: `There is a new version of Spectrum Graph available`,
-  //   spectrumScanIncomplete: `Spectrum scan appears incomplete. Run a manual scan if needed.`,
-  //   spectrumScanInvalid: `Spectrum scan appears invalid. Run a manual scan if needed.`,
-  //   spectrumScanLocked:  `Scanning is currently locked by the administrator`,
-  //   errorDuringInitialisation: `[${pluginName}] Error initializing graph. The server may need to be restarted.`,
-  //   holdPeaks: `Hold Peaks`,
-  //   smoothGraphEdges: `Smooth Graph Edges`,
-  //   relativeFixedScale: `Relative/Fixed Scale`,
-  //   autoBaseline: `Auto Baseline`,
-  //   performManualScan: `Run Manual Scan`,
-  //   moveAboveSignalGraph: `Move Above Signal Graph`,
-  //   resolutionTooLowToDisplay: `Resolution too low to display`,
-  //   scanOlderThanXMinutes: `Scan older than {hours}h {minutes}m for {antennas}`,
-  //   noSignal: `[${pluginName}] Error receiving signal data`,
-  //   scanning: `Scanning`,
-  // },
-  // es: {
-  //   __name: 'Español',
-  //   spectrumGraph: `Gráfico de espectro`,
-  //   newVersion: `Hay una nueva versión de Spectrum Graph disponible`,
-  //   spectrumScanIncomplete: `El escaneo de espectro parece incompleto. Realice un escaneo manual si es necesario.`,
-  //   spectrumScanInvalid: `El escaneo de espectro parece inválido. Realice un escaneo manual si es necesario.`,
-  //   spectrumScanLocked: `El escaneo está actualmente bloqueado por el administrador`,
-  //   errorDuringInitialisation: `[${pluginName}] Error durante la inicialización del gráfico. Es posible que sea necesario reiniciar el servidor.`,
-  //   holdPeaks: `Mantener Picos`,
-  //   smoothGraphEdges: `Suavizar los Bordes del Gráfico`,
-  //   relativeFixedScale: `Escala Relativa/Fija`,
-  //   autoBaseline: `Línea Base Automática`,
-  //   performManualScan: `Realizar Escaneo Manual`,
-  //   moveAboveSignalGraph: `Mover por Encima del Gráfico de Señales`,
-  //   resolutionTooLowToDisplay: `Resolución demasiado baja para mostrar`,
-  //   scanOlderThanXMinutes: `El escaneo es más antiguo que {hours}h {minutes}m para {antennas}`,
-  //   noSignal: `[${pluginName}] Error al recibir datos de señal`,
-  //   scanning: `Escaneando`,
-  // },
-  // fr: {
-  //   __name: 'Français',
-  //   spectrumGraph: `Graphique du spectre`,
-  //   newVersion: `Une nouvelle version de Spectrum Graph est disponible`,
-  //   spectrumScanIncomplete: `L'analyse du spectre semble incomplète. Effectuez un nouveau scan manuel si nécessaire.`,
-  //   spectrumScanInvalid: `L'analyse du spectre semble invalide. Effectuez un scan manuel si nécessaire.`,
-  //   spectrumScanLocked: `Le balayage est actuellement verrouillé par l'administrateur`,
-  //   errorDuringInitialisation: `[${pluginName}] Erreur lors de l'initialisation du graphique. Le serveur pourrait avoir besoin d'être redémarré.`,
-  //   holdPeaks: `Maintenir les Pics`,
-  //   smoothGraphEdges: `Lisser les Bords du Graphique`,
-  //   relativeFixedScale: `Échelle Relative/Fixe`,
-  //   autoBaseline: `Base Automatique`,
-  //   performManualScan: `Effectuer un Scan Manuel`,
-  //   moveAboveSignalGraph: `Déplacer au-dessus du Graphique du Signal`,
-  //   resolutionTooLowToDisplay: `Résolution trop basse pour afficher`,
-  //   scanOlderThanXMinutes: `Le scan est plus ancien que {hours}h {minutes}m pour {antennas}`,
-  //   noSignal: `[${pluginName}] Erreur lors de la réception des données du signal`,
-  //   scanning: `Numérisation`,
-  // },
-  // de: {
-  //   __name: 'Deutsch',
-  //   spectrumGraph: `Spektrumanalyse`,
-  //   newVersion: `Eine neue Version von Spectrum Graph ist verfügbar`,
-  //   spectrumScanIncomplete: `Spektrums-Scan scheint unvollständig. Führen Sie bei Bedarf einen manuellen Scan durch.`,
-  //   spectrumScanInvalid: `Spektrums-Scan scheint ungültig. Führen Sie bei Bedarf einen manuellen Scan durch.`,
-  //   spectrumScanLocked: `Das Scannen ist derzeit vom Administrator gesperrt`,
-  //   errorDuringInitialisation: `[${pluginName}] Fehler bei der Initialisierung des Diagramms. Der Server muss möglicherweise neu gestartet werden.`,
-  //   holdPeaks: `Spitzen Halten`,
-  //   smoothGraphEdges: `Diagramm-Kanten Glätten`,
-  //   relativeFixedScale: `Relative/Feste Skala`,
-  //   autoBaseline: `Automatische Basislinie`,
-  //   performManualScan: `Manuellen Scan Durchführen`,
-  //   moveAboveSignalGraph: `Über dem Signal-Diagramm Verschieben`,
-  //   resolutionTooLowToDisplay: `Auflösung zu niedrig zum Anzeigen`,
-  //   scanOlderThanXMinutes: `Scan ist älter als {hours}h {minutes}min für {antennas}`,
-  //   noSignal: `[${pluginName}] Fehler beim Empfangen der Signaldaten`,
-  //   scanning: `Scannen`,
-  // },
-  // nl: {
-  //   __name: 'Nederlands',
-  //   spectrumGraph: `Spectrumschaart`,
-  //   newVersion: `Er is een nieuwe versie van Spectrum Graph beschikbaar`,
-  //   spectrumScanIncomplete: `Spectrumscan lijkt onvolledig. Voer indien nodig een handmatige scan uit.`,
-  //   spectrumScanInvalid: `Spectrumscan lijkt ongeldig. Voer indien nodig een handmatige scan uit.`,
-  //   spectrumScanLocked: `Scannen is momenteel vergrendeld door de beheerder`,
-  //   errorDuringInitialisation: `[${pluginName}] Fout tijdens grafiekinitialisatie. De server moet mogelijk opnieuw worden gestart.`,
-  //   holdPeaks: `Pieken vasthouden`,
-  //   smoothGraphEdges: `Grafiekranden gladmaken`,
-  //   relativeFixedScale: `Relatieve/Vaste schaal`,
-  //   autoBaseline: `Automatische basislijn`,
-  //   performManualScan: `Handmatige scan uitvoeren`,
-  //   moveAboveSignalGraph: `Verplaats boven signaalgrafiek`,
-  //   resolutionTooLowToDisplay: `Resolutie te laag om weer te geven`,
-  //   scanOlderThanXMinutes: `Scan is ouder dan {hours}u {minutes}m voor {antennas}`,
-  //   noSignal: `[${pluginName}] Fout bij het ontvangen van signaalgegevens`,
-  //   scanning: `Scannen`,
-  // },
-  // ru: {
-  //   __name: 'Русский',
-  //   spectrumGraph: `График спектра`,
-  //   newVersion: `Доступна новая версия Spectrum Graph`,
-  //   spectrumScanIncomplete: `Спектральное сканирование кажется неполным. Выполните ручное сканирование, если необходимо.`,
-  //   spectrumScanInvalid: `Спектральное сканирование кажется недействительным. Выполните ручное сканирование, если необходимо.`,
-  //   spectrumScanLocked: `Сканирование в данный момент заблокировано администратором`,
-  //   errorDuringInitialisation: `[${pluginName}] Ошибка при инициализации графика. Возможно, потребуется перезапустить сервер.`,
-  //   holdPeaks: `Удерживать пики`,
-  //   smoothGraphEdges: `Сгладить края графика`,
-  //   relativeFixedScale: `Относительная/фиксированная шкала`,
-  //   autoBaseline: `Автоматическая базовая линия`,
-  //   performManualScan: `Выполнить ручное сканирование`,
-  //   moveAboveSignalGraph: `Переместить над графиком сигнала`,
-  //   resolutionTooLowToDisplay: `Разрешение слишком низкое для отображения`,
-  //   scanOlderThanXMinutes: `Сканирование старше {hours}ч {minutes}мин для {antennas}`,
-  //   noSignal: `[${pluginName}] Ошибка при получении данных сигнала`,
-  //   scanning: `Сканирование`,
-  // },
-  // pl: {
-  //   __name: 'Polski',
-  //   spectrumGraph: `Wykres widma`,
-  //   newVersion: `Dostępna jest nowa wersja Spectrum Graph`,
-  //   spectrumScanIncomplete: `Skanowanie widma wydaje się niekompletne. W razie potrzeby przeprowadź ręczne skanowanie.`,
-  //   spectrumScanInvalid: `Skanowanie widma wydaje się nieprawidłowe. W razie potrzeby przeprowadź ręczne skanowanie.`,
-  //   spectrumScanLocked: `Skanowanie jest obecnie zablokowane przez administratora`,
-  //   errorDuringInitialisation: `[${pluginName}] Błąd podczas inicjalizacji wykresu. Serwer może wymagać ponownego uruchomienia.`,
-  //   holdPeaks: `Zatrzymaj szczyty`,
-  //   smoothGraphEdges: `Wygładź krawędzie wykresu`,
-  //   relativeFixedScale: `Skala względna/stała`,
-  //   autoBaseline: `Automatyczna linia bazowa`,
-  //   performManualScan: `Przeprowadź ręczne skanowanie`,
-  //   moveAboveSignalGraph: `Przenieś nad wykres sygnału`,
-  //   resolutionTooLowToDisplay: `Rozdzielczość zbyt niska do wyświetlenia`,
-  //   scanOlderThanXMinutes: `Skanowanie jest starsze niż {hours}g {minutes}min dla {antennas}`,
-  //   noSignal: `[${pluginName}] Błąd podczas odbierania danych sygnału`,
-  //   scanning: `Skanowanie`,
-  // },
-  // cs: {
-  //   __name: 'Čeština',
-  //   spectrumGraph: `Spektrální graf`,
-  //   newVersion: `Je k dispozici nová verze Spectrum Graph`,
-  //   spectrumScanIncomplete: `Skenování spektra se zdá být neúplné. Proveďte ruční skenování, pokud je to nutné.`,
-  //   spectrumScanInvalid: `Skenování spektra se zdá být neplatné. Proveďte ruční skenování, pokud je to nutné.`,
-  //   spectrumScanLocked: `Skenování je momentálně uzamčeno administrátorem`,
-  //   errorDuringInitialisation: `[${pluginName}] Chyba při inicializaci grafu. Server může být nutné restartovat.`,
-  //   holdPeaks: `Udržet vrcholy`,
-  //   smoothGraphEdges: `Hladit okraje grafu`,
-  //   relativeFixedScale: `Relativní/Fixní měřítko`,
-  //   autoBaseline: `Automatická základní čára`,
-  //   performManualScan: `Provést ruční skenování`,
-  //   moveAboveSignalGraph: `Přesunout nad graf signálu`,
-  //   resolutionTooLowToDisplay: `Příliš nízké rozlišení pro zobrazení`,
-  //   scanOlderThanXMinutes: `Skenování je starší než {hours}h {minutes}min pro {antennas}`,
-  //   noSignal: `[${pluginName}] Chyba při přijímání dat signálu`,
-  //   scanning: `Skenování`,
-  // },
-  // hu: {
-  //   __name: 'Magyar',
-  //   spectrumGraph: `Spektrum grafikon`,
-  //   newVersion: `A Spectrum Graph új verziója elérhető`,
-  //   spectrumScanIncomplete: `A spektrum szkennelés hiányosnak tűnik. Végezz manuális újraellenőrzést, ha szükséges.`,
-  //   spectrumScanInvalid: `A spektrum szkennelés érvénytelennek tűnik. Végezz manuális újraellenőrzést, ha szükséges.`,
-  //   spectrumScanLocked: `A szkennelés jelenleg az adminisztrátor által zárolt`,
-  //   errorDuringInitialisation: `[${pluginName}] Hiba a grafikon inicializálásakor. Lehet, hogy újra kell indítani a szervert.`,
-  //   holdPeaks: `Csúcsok kiemelése`,
-  //   smoothGraphEdges: `Grafikon élek simítása`,
-  //   relativeFixedScale: `Relatív/Fix skála`,
-  //   autoBaseline: `Automatikus alapvonal`,
-  //   performManualScan: `Kézi szkennelés`,
-  //   moveAboveSignalGraph: `Mozgatás a jelgrafikon fölé`,
-  //   resolutionTooLowToDisplay: `A felbontás túl alacsony a megjelenítéshez`,
-  //   scanOlderThanXMinutes: `A szkennelés régebbi, mint {hours}ó {minutes}p a {antennas}`,
-  //   noSignal: `[${pluginName}] Hiba a jeladatok fogadása közben`,
-  //   scanning: `Szkennelés`,
-  // },
-  // Every key below must match a key in the `en` block above, otherwise
-  // getTranslatedText() silently falls back to the English value. The Turkish
-  // text itself lives in locales/tr.json under plugin.spectrumPlugin.* — this
-  // block only wires the two together.
-  tr: {
-    __name: 'Türkçe',
-    spectrumGraph: t('plugin.spectrum'),
-    newVersion: t('plugin.spectrumPlugin.newVersionAvailable'),
-    spectrumScanIncomplete: t('plugin.spectrumPlugin.spectrumScanAppearsIncomplete'),
-    spectrumScanInvalid: t('plugin.spectrumPlugin.spectrumScanInvalid'),
-    spectrumScanLocked: t('plugin.spectrumPlugin.spectrumScanLocked'),
-    errorDuringInitialisation: `[${pluginName}] ${t('plugin.spectrumPlugin.errorDuringInitialisation')}`,
-    holdPeaks: t('plugin.spectrumPlugin.holdPeaks'),
-    smoothGraphEdges: t('plugin.spectrumPlugin.smoothGraphEdges'),
-    relativeFixedScale: t('plugin.spectrumPlugin.relativeFixedScale'),
-    autoBaseline: t('plugin.spectrumPlugin.autoBaseline'),
-    performManualScan: t('plugin.spectrumPlugin.performManualScan'),
-    moveAboveSignalGraph: t('plugin.spectrumPlugin.moveAboveSignalGraph'),
-    resolutionTooLowToDisplay: t('plugin.spectrumPlugin.resolutionTooLowToDisplay'),
-    scanOlderThanXMinutes: t('plugin.spectrumPlugin.scanOlderThanXMinutes'),
-    noSignal: `[${pluginName}] ${t('plugin.spectrumPlugin.noSignal')}`,
-    scanning: t('plugin.spectrumPlugin.scanning'),
-  }
+// All text lives in the webserver's shared locales (locales/<lang>.json, under
+// plugin.spectrumPlugin), so each language is reviewed in one file. The
+// English here is only a fallback for webservers whose locales lack a key.
+const TEXT_KEYS = {
+  spectrumGraph:             ['plugin.spectrumPlugin.spectrumGraph',                 'Spectrum Graph'],
+  newVersion:                ['plugin.spectrumPlugin.newVersionAvailable',           'There is a new version of Spectrum Graph available'],
+  spectrumScanIncomplete:    ['plugin.spectrumPlugin.spectrumScanAppearsIncomplete', 'Spectrum scan appears incomplete. Perform a manual scan if needed.'],
+  spectrumScanInvalid:       ['plugin.spectrumPlugin.spectrumScanInvalid',           'Spectrum scan appears invalid. Perform a manual scan if needed.'],
+  spectrumScanLocked:        ['plugin.spectrumPlugin.spectrumScanLocked',            'Scanning is currently locked by the administrator'],
+  errorDuringInitialisation: ['plugin.spectrumPlugin.errorDuringInitialisation',     'Error initialising graph. The server may need to be restarted.'],
+  holdPeaks:                 ['plugin.spectrumPlugin.holdPeaks',                     'Hold Peaks'],
+  smoothGraphEdges:          ['plugin.spectrumPlugin.smoothGraphEdges',              'Smooth Graph Edges'],
+  relativeFixedScale:        ['plugin.spectrumPlugin.relativeFixedScale',            'Relative/Fixed Scale'],
+  autoBaseline:              ['plugin.spectrumPlugin.autoBaseline',                  'Auto Baseline'],
+  performManualScan:         ['plugin.spectrumPlugin.performManualScan',             'Perform Manual Scan'],
+  moveAboveSignalGraph:      ['plugin.spectrumPlugin.moveAboveSignalGraph',          'Move Above Signal Graph'],
+  resolutionTooLowToDisplay: ['plugin.spectrumPlugin.resolutionTooLowToDisplay',     'Resolution too low to display'],
+  scanOlderThanXMinutes:     ['plugin.spectrumPlugin.scanOlderThanXMinutes',         'Scan older than {hours}h {minutes}m for {antennas}'],
+  noSignal:                  ['plugin.spectrumPlugin.noSignal',                      'Error receiving signal data'],
+  scanning:                  ['plugin.spectrumPlugin.scanning',                      'Scanning'],
 };
+const PLUGIN_PREFIXED_KEYS = new Set(['errorDuringInitialisation', 'noSignal']);
+
+// 'both' is only offered where the webserver's t() can render it.
+const LANGUAGE_NAMES = { en: 'English', tr: 'Türkçe', both: 'English / Türkçe' };
+function supportedLanguages() {
+  const hasBilingual = typeof window !== 'undefined' && typeof window.getLanguageMode === 'function';
+  return Object.keys(LANGUAGE_NAMES).filter(lang => lang !== 'both' || hasBilingual);
+}
 
 // const variables
 const debug = false;
@@ -403,55 +216,48 @@ function logError(...msg) {
 /* ==================================================
                     LANGUAGE HANDLING
    ================================================== */
-// Resolves the shared /setup language mode (en/tr/both) down to one of this
-// plugin's own translation dictionaries. 'both' has no bilingual strings here,
-// so it falls back to 'en', matching how other single-locale callers treat it.
+// Follows the shared /setup language mode (en/tr/both).
 //
 // Not every webserver has that shared setting: getLanguageMode() ships with
 // the /setup language config, which older branches never received. Assuming
 // 'en' there silently forces English onto Turkish tuners, so fall back to the
 // browser detection this plugin used before the shared setting existed.
 function resolveSharedLanguage() {
+  const supported = supportedLanguages();
+
   if (typeof window !== 'undefined' && typeof window.getLanguageMode === 'function') {
-    return window.getLanguageMode() === 'tr' ? 'tr' : 'en';
+    const mode = window.getLanguageMode();
+    return supported.includes(mode) ? mode : 'en';
   }
 
   const browserLanguage = navigator.language || navigator.userLanguage || 'en';
-  const languageCode = browserLanguage.split('-')[0];
-  const fullLanguageCode = browserLanguage.toLowerCase();
-
-  if (translations[fullLanguageCode]) return fullLanguageCode;
-  if (translations[languageCode]) return languageCode;
-  return 'en';
-}
-
-if (localStorage.getItem('enableSpectrumCurrentLanguage')) {
-  currentLanguage = localStorage.getItem('enableSpectrumCurrentLanguage');
-} else {
-  currentLanguage = resolveSharedLanguage();
+  const languageCode = browserLanguage.split('-')[0].toLowerCase();
+  return supported.includes(languageCode) ? languageCode : 'en';
 }
 
 function getCurrentLanguage() {
     localStorageItem.currentLanguage = `enableSpectrumCurrentLanguage`;
 
-    // Check if language is saved in localStorage
+    // A language picked from this plugin's own menu overrides the shared one.
     const saved = localStorage.getItem(localStorageItem.currentLanguage);
 
-    if (saved) {
-        currentLanguage = saved;
-    } else {
-        currentLanguage = resolveSharedLanguage();
-    }
+    currentLanguage = supportedLanguages().includes(saved) ? saved : resolveSharedLanguage();
 }
+
+getCurrentLanguage();
 
 function getTranslatedText(key) {
   getCurrentLanguage();
 
-  if (translations[currentLanguage] && translations[currentLanguage][key]) {
-    return translations[currentLanguage][key];
-  } else {
-    return translations['en'][key];
-  }
+  const entry = TEXT_KEYS[key];
+  if (!entry) return key;
+
+  const [path, fallback] = entry;
+  const text = typeof window.t === 'function'
+    ? (window.t(path, fallback, currentLanguage) || fallback)
+    : fallback;
+
+  return PLUGIN_PREFIXED_KEYS.has(key) ? `[${pluginName}] ${text}` : text;
 }
 
 /* ==================================================
@@ -481,8 +287,8 @@ function createLanguageContextMenu(x, y) {
 
     const menu = $('<div class="language-context-menu bg-color-4"></div>');
 
-    Object.entries(translations).forEach(([lang, data]) => {
-        const label = data.__name || lang;
+    supportedLanguages().forEach((lang) => {
+        const label = LANGUAGE_NAMES[lang];
 
         menu.append(`
             <div data-lang="${lang}">
@@ -2537,30 +2343,29 @@ async function initializeGraph(checkIfScanningOnly = false, returnAfterAntennaCh
 }
 
 function createdOutdatedNotice() {
-    const t = translations[currentLanguage];
-
     const agoMin = LAST_ANTENNA_SCAN_NOTICE_MINUTES;
     const hours = Math.floor(agoMin / 60);
     const minutes = agoMin % 60;
 
-    let message = t.scanOlderThanXMinutes;
+    // Global flags: in 'both' mode each placeholder appears once per language.
+    let message = getTranslatedText('scanOlderThanXMinutes');
 
     if (hours > 0) {
-        message = message.replace('{hours}', hours);
+        message = message.replace(/\{hours\}/g, hours);
     } else {
-        message = message.replace(/\{hours\}[^\s]+ /, '');
+        message = message.replace(/\{hours\}[^\s]+ /g, '');
     }
 
     if (minutes > 0 || agoMin === 0) {
-        message = message.replace('{minutes}', minutes);
+        message = message.replace(/\{minutes\}/g, minutes);
     } else {
-        message = message.replace(/ \{minutes\}[^\s]+/, '');
+        message = message.replace(/ \{minutes\}[^\s]+/g, '');
     }
 
     if (outdatedAntennaList !== '' && isUsingAntennaSwitch) {
-        message = message.replace('{antennas}', outdatedAntennaList);
+        message = message.replace(/\{antennas\}/g, outdatedAntennaList);
     } else {
-        message = message.replace(/ [^\s]+ \{antennas\}/, '');
+        message = message.replace(/ [^\s]+ \{antennas\}/g, '');
     }
 
     return message + '.';
